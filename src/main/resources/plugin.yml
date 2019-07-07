@@ -1,0 +1,13 @@
+main: it.multicoredev.uhc.Main
+name: MultiCoreUHC
+version: 1.0.0
+api-version: 1.13
+author: LoreSchaeffer
+website: https://multicore.network
+
+commands:
+  help:
+    description: Show an help message
+  startuhc:
+    description: Starts the uhc
+    aliases: [suhc, suca]
