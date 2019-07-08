@@ -1,7 +1,5 @@
 package it.multicoredev.uhc;
 
-import it.multicoredev.uhc.util.Time;
-
 /**
  * Copyright © 2019 by Lorenzo Magni
  * This file is part of MultiCoreUHC.
@@ -25,12 +23,6 @@ import it.multicoredev.uhc.util.Time;
 public class Test {
 
     public static void main(String[] args) {
-        for(int i = 0; i < 7400; i++) {
-            int j = Time.endVideo(i, 15);
-            if(j != -1) {
-                System.out.println(Time.getReadableTimer(i));
-                System.out.println(j);
-            }
-        }
+
     }
 }

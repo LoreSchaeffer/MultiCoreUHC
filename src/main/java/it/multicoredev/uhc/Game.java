@@ -1,6 +1,5 @@
 package it.multicoredev.uhc;
 
-import it.multicoredev.mbcore.spigot.Chat;
 import it.multicoredev.uhc.util.Misc;
 import it.multicoredev.uhc.util.Time;
 import org.bukkit.Bukkit;

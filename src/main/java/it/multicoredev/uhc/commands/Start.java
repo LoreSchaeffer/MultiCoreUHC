@@ -42,7 +42,6 @@ public class Start implements CommandExecutor {
         }
 
         game.startGame();
-
         return true;
     }
 }

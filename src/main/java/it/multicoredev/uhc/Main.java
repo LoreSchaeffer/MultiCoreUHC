@@ -45,7 +45,6 @@ public class Main extends JavaPlugin {
         }
 
         registerCommands();
-        //getServer().getScheduler().runTaskTimerAsynchronously(plugin, timer, 0, 20);
     }
 
     @Override

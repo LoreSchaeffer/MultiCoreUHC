@@ -56,6 +56,7 @@
                                     <shadedPattern>${project.name}.mclib</shadedPattern>
                                 </relocation>
                             </relocations>
+                            <outputDirectory>D:\Desktop\Server\plugins</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

@@ -32,21 +32,14 @@ public class TimerTask implements Runnable {
     private long time;
 
     public void run() {
+        long worldTime = Bukkit.getServer().getWorld(config.getWorld()).getTime();
+
         if (!isDeathmatch()) {
             int endVid = Time.endVideo(time, config.getVideoLen());
             if (endVid != -1) {
-                Misc.broadcast(config.getMessage("end-video").replace("{n}", String.valueOf(endVid )));
+                Misc.broadcast(config.getMessage("end-video").replace("{n}", String.valueOf(endVid)));
             }
-        } else {
 
-        }
-
-        long worldTime = Bukkit.getServer().getWorld(config.getWorld()).getTime();
-
-        if(isDeathmatch()) {
-            game.getBossBar().setColor(BarColor.RED);
-            game.getBossBar().setProgress(1);
-        } else {
             if(!isDay(worldTime)) {
                 game.getBossBar().setColor(BarColor.BLUE);
                 game.getBossBar().setProgress((double) (worldTime - 12542) / (double) (23999 - 12542));
@@ -54,7 +47,11 @@ public class TimerTask implements Runnable {
                 game.getBossBar().setColor(BarColor.YELLOW);
                 game.getBossBar().setProgress((double) worldTime / (double) 12542);
             }
+        } else {
+            game.getBossBar().setColor(BarColor.RED);
+            game.getBossBar().setProgress(1);
         }
+
         game.updateBossbar();
         time++;
     }
