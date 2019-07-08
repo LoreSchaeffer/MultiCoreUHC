@@ -1,8 +1,12 @@
+title: "UHC Name"
+world: "world"
+
 timers:
   uhc-len: 120
   video-len: 15
 
 messages:
+  end-video: "&eIt's time to end the {n} video!"
   game-running: "&cGame already running!"
   incorrect-usage: "&cIncorrect usage! Use this command like: &e{command}"
   insufficient-perm: "&cInsufficient permissions!"

@@ -1,10 +1,8 @@
-package it.multicoredev.uhc;
+package it.multicoredev.uhc.util;
 
-import it.multicoredev.mbcore.spigot.ConfigManager;
-import it.multicoredev.mbcore.spigot.config.Configuration;
-import org.bukkit.plugin.Plugin;
-
-import java.io.File;
+import it.multicoredev.mbcore.spigot.Chat;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 /**
  * Copyright © 2019 by Lorenzo Magni
@@ -26,42 +24,10 @@ import java.io.File;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Config {
-    private Configuration config;
-    private Plugin plugin;
-    private ConfigManager cm;
-
-    Config(Plugin plugin) {
-        this.plugin = plugin;
-        cm = new ConfigManager(plugin);
-    }
-
-    boolean loadConfig() {
-        config = cm.autoloadConfig(plugin.getResource("config.yml"), new File(plugin.getDataFolder(), "config.yml"));
-        return config != null;
-    }
-
-    boolean saveConfig() {
-        return cm.saveConfig(config, new File(plugin.getDataFolder(), "config.yml"));
-    }
-
-    public String getTitle() {
-        return config.getString("title");
-    }
-
-    public String getWorld() {
-        return config.getString("world");
-    }
-
-    public int getVideoLen() {
-        return config.getInt("timers.video-len");
-    }
-
-    public int getUHCLen() {
-        return config.getInt("timers.uhc-len");
-    }
-
-    public String getMessage(String path) {
-        return config.getString("messages." + path);
+public class Misc {
+    public static void broadcast(String msg) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            Chat.send(msg, player, true);
+        }
     }
 }

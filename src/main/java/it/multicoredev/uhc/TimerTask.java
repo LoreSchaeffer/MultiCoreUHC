@@ -1,6 +1,12 @@
 package it.multicoredev.uhc;
 
+import it.multicoredev.uhc.util.Misc;
+import it.multicoredev.uhc.util.Time;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+
 import static it.multicoredev.uhc.Main.config;
+import static it.multicoredev.uhc.Main.game;
 
 /**
  * Copyright © 2019 by Lorenzo Magni
@@ -27,12 +33,34 @@ public class TimerTask implements Runnable {
 
     public void run() {
         if (!isDeathmatch()) {
-
+            int endVid = Time.endVideo(time, config.getVideoLen());
+            if (endVid != -1) {
+                Misc.broadcast(config.getMessage("end-video").replace("{n}", String.valueOf(endVid )));
+            }
         } else {
 
         }
 
+        long worldTime = Bukkit.getServer().getWorld(config.getWorld()).getTime();
+
+        if(isDeathmatch()) {
+            game.getBossBar().setColor(BarColor.RED);
+            game.getBossBar().setProgress(1);
+        } else {
+            if(!isDay(worldTime)) {
+                game.getBossBar().setColor(BarColor.BLUE);
+                game.getBossBar().setProgress((double) (worldTime - 12542) / (double) (23999 - 12542));
+            } else {
+                game.getBossBar().setColor(BarColor.YELLOW);
+                game.getBossBar().setProgress((double) worldTime / (double) 12542);
+            }
+        }
+        game.updateBossbar();
         time++;
+    }
+
+    private boolean isDay(long worldTime) {
+        return worldTime < 12542;
     }
 
     public long getTime() {
@@ -40,6 +68,6 @@ public class TimerTask implements Runnable {
     }
 
     public boolean isDeathmatch() {
-        return time >= config.getUHCLen();
+        return time >= config.getUHCLen() * 60;
     }
 }

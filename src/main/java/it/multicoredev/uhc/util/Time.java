@@ -34,7 +34,7 @@ public class Time {
     }
 
     public static int endVideo(long time, int videoLen) {
-        if((time % videoLen) != 0) return -1;
-        return (int) time / videoLen;
+        if(time == 0 || (time % (videoLen * MINUTE)) != 0) return -1;
+        return (int) time / videoLen / 60;
     }
 }

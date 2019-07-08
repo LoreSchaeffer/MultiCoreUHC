@@ -1,6 +1,12 @@
 package it.multicoredev.uhc;
 
 import it.multicoredev.mbcore.spigot.Chat;
+import it.multicoredev.uhc.util.Misc;
+import it.multicoredev.uhc.util.Time;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -29,7 +35,8 @@ import static it.multicoredev.uhc.Main.config;
 public class Game {
     private Plugin plugin;
     private boolean running = false;
-    public static TimerTask timer;
+    private TimerTask timer;
+    private BossBar bossBar;
 
     public Game(Plugin plugin) {
         this.plugin = plugin;
@@ -37,11 +44,25 @@ public class Game {
     }
 
     public void startGame() {
-        for(Player player : plugin.getServer().getOnlinePlayers()) {
-            Chat.send(config.getMessage("uhc-start"), player, true);
-        }
+        Misc.broadcast(config.getMessage("uhc-start"));
 
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, timer, 0, 20);
+        //TODO Reset period to 20 ticks
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, timer, 0, 1);
+        createBossbar();
+        bossBar.setProgress(1);
+    }
+
+    private void createBossbar() {
+        bossBar = Bukkit.getServer().createBossBar(config.getTitle() + " - " + Time.getReadableTimer(getTime()), BarColor.YELLOW, BarStyle.SOLID);
+        bossBar.setVisible(true);
+
+        for(Player player : plugin.getServer().getOnlinePlayers()) {
+            bossBar.addPlayer(player);
+        }
+    }
+
+    public void updateBossbar() {
+        bossBar.setTitle(config.getTitle() + " - " + Time.getReadableTimer(getTime()));
     }
 
     public boolean isRunning() {
@@ -62,5 +83,9 @@ public class Game {
 
     public long getTime() {
         return timer.getTime();
+    }
+
+    public BossBar getBossBar() {
+        return bossBar;
     }
 }
