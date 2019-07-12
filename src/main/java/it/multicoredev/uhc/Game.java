@@ -9,6 +9,8 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+
 import static it.multicoredev.uhc.Main.config;
 
 /**
@@ -36,6 +38,9 @@ public class Game {
     private boolean running = false;
     private TimerTask timer;
     private BossBar bossBar;
+    private ArrayList<Player> alivePlayers = new ArrayList<>();
+    private ArrayList<Player> deadPlayers = new ArrayList<>();
+    private ArrayList<Player> respawnedPlayers = new ArrayList<>();
 
     public Game(Plugin plugin) {
         this.plugin = plugin;
@@ -86,5 +91,29 @@ public class Game {
 
     public BossBar getBossBar() {
         return bossBar;
+    }
+
+    public ArrayList<Player> getAlivePlayers() {
+        return alivePlayers;
+    }
+
+    public ArrayList<Player> getDeadPlayers() {
+        return deadPlayers;
+    }
+
+    public ArrayList<Player> getRespawnedPlayers() {
+        return respawnedPlayers;
+    }
+
+    public void addAlivePlayer(Player player) {
+        alivePlayers.add(player);
+    }
+
+    public void addDeadPlayer(Player player) {
+        deadPlayers.add(player);
+    }
+
+    public void addRespawnedPlayer(Player player) {
+        respawnedPlayers.add(player);
     }
 }

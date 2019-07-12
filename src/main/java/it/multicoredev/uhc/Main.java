@@ -4,6 +4,8 @@ import it.multicoredev.mbcore.spigot.Chat;
 import it.multicoredev.mbcore.spigot.ConfigManager;
 import it.multicoredev.mbcore.spigot.config.Configuration;
 import it.multicoredev.uhc.commands.Start;
+import it.multicoredev.uhc.listeners.PlayerDeathListener;
+import it.multicoredev.uhc.listeners.PlayerRespawnListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -44,6 +46,7 @@ public class Main extends JavaPlugin {
             return;
         }
 
+        registerListeners();
         registerCommands();
     }
 
@@ -53,5 +56,10 @@ public class Main extends JavaPlugin {
     }
     private void registerCommands() {
         getCommand("startuhc").setExecutor(new Start());
+    }
+
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerRespawnListener(), this);
     }
 }

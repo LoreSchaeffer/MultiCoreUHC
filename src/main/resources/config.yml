@@ -5,6 +5,11 @@ timers:
   uhc-len: 120
   video-len: 15
 
+respawn:
+  enabled: true
+  active-until: 30
+  respawn-health: 20
+
 messages:
   end-video: "&eIt's time to end the {n} video!"
   game-running: "&cGame already running!"

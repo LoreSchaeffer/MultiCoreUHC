@@ -1,10 +1,12 @@
-package it.multicoredev.uhc;
+package it.multicoredev.uhc.listeners;
 
-import it.multicoredev.mbcore.spigot.ConfigManager;
-import it.multicoredev.mbcore.spigot.config.Configuration;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.io.File;
+import static it.multicoredev.uhc.Main.config;
+import static it.multicoredev.uhc.Main.game;
 
 /**
  * Copyright © 2019 by Lorenzo Magni
@@ -26,54 +28,14 @@ import java.io.File;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Config {
-    private Configuration config;
-    private Plugin plugin;
-    private ConfigManager cm;
+public class PlayerDeathListener implements Listener {
 
-    Config(Plugin plugin) {
-        this.plugin = plugin;
-        cm = new ConfigManager(plugin);
-    }
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
 
-    boolean loadConfig() {
-        config = cm.autoloadConfig(plugin.getResource("config.yml"), new File(plugin.getDataFolder(), "config.yml"));
-        return config != null;
-    }
-
-    boolean saveConfig() {
-        return cm.saveConfig(config, new File(plugin.getDataFolder(), "config.yml"));
-    }
-
-    public String getTitle() {
-        return config.getString("title");
-    }
-
-    public String getWorld() {
-        return config.getString("world");
-    }
-
-    public int getVideoLen() {
-        return config.getInt("timers.video-len");
-    }
-
-    public int getUHCLen() {
-        return config.getInt("timers.uhc-len");
-    }
-
-    public String getMessage(String path) {
-        return config.getString("messages." + path);
-    }
-
-    public boolean isRespawnAllowed() {
-        return config.getBoolean("respawn.enabled");
-    }
-
-    public int getRespawnTime() {
-        return config.getInt("respawn.active-until");
-    }
-
-    public int health() {
-        return config.getInt("respawn.health");
+        if(config.isRespawnAllowed() && (game.getTime() / 60) <= config.getRespawnTime() && !game.getRespawnedPlayers().contains(player)) {
+            game.addRespawnedPlayer(player);
+        }
     }
 }
