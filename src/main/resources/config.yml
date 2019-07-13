@@ -15,4 +15,5 @@ messages:
   game-running: "&cGame already running!"
   incorrect-usage: "&cIncorrect usage! Use this command like: &e{command}"
   insufficient-perm: "&cInsufficient permissions!"
+  player-respawn: "&b{player} &9has been revived!"
   uhc-start: "&2&lUHC starts now!"

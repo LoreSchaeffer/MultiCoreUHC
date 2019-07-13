@@ -1,15 +1,13 @@
 package it.multicoredev.uhc.listeners;
 
+import it.multicoredev.uhc.util.Misc;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-
-import static it.multicoredev.uhc.Main.config;
-import static it.multicoredev.uhc.Main.game;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.Inventory;
 
 /**
  * Copyright © 2019 by Lorenzo Magni
@@ -31,22 +29,22 @@ import static it.multicoredev.uhc.Main.game;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class PlayerDeathListener implements Listener {
+public class OpenInventoryListener implements Listener {
 
     @EventHandler
-    public void onDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+    public void onOpenInventory(InventoryOpenEvent event) {
+        Player caller = Bukkit.getPlayer(event.getPlayer().getUniqueId());
 
-        if(config.isRespawnAllowed() && (game.getTime() / 60) <= config.getRespawnTime()) {
-            if(game.getRespawnedPlayers().contains(player)) {
-                game.addDeadPlayer(player);
-            } else {
-                game.addRespawnedPlayer(player);
-            }
-        }
+        if(caller.getGameMode().equals(GameMode.SPECTATOR)) {
+            Player target = Misc.getNearestPlayer(caller);
 
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            p.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 1, 1);
+            if(target == null) return;
+
+            Inventory callerInventory = caller.getInventory();
+            Inventory targetInventory = target.getInventory();
+
+            callerInventory.clear();
+            callerInventory.setContents(targetInventory.getContents());
         }
     }
 }

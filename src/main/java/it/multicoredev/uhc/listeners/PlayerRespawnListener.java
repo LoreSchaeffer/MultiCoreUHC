@@ -1,11 +1,13 @@
 package it.multicoredev.uhc.listeners;
 
+import it.multicoredev.uhc.util.Misc;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import static it.multicoredev.uhc.Main.config;
 import static it.multicoredev.uhc.Main.game;
 
 /**
@@ -36,6 +38,8 @@ public class PlayerRespawnListener implements Listener {
 
         if(game.getRespawnedPlayers().contains(player) || game.getDeadPlayers().contains(player)) {
             player.setGameMode(GameMode.SPECTATOR);
+        } else {
+            Misc.broadcast(config.getMessage("player-respawn").replace("{player}", player.getDisplayName()));
         }
     }
 }

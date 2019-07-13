@@ -4,6 +4,7 @@ import it.multicoredev.mbcore.spigot.Chat;
 import it.multicoredev.mbcore.spigot.ConfigManager;
 import it.multicoredev.mbcore.spigot.config.Configuration;
 import it.multicoredev.uhc.commands.Start;
+import it.multicoredev.uhc.listeners.OpenInventoryListener;
 import it.multicoredev.uhc.listeners.PlayerDeathListener;
 import it.multicoredev.uhc.listeners.PlayerRespawnListener;
 import org.bukkit.plugin.Plugin;
@@ -61,5 +62,6 @@ public class Main extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(), this);
+        getServer().getPluginManager().registerEvents(new OpenInventoryListener(), this);
     }
 }

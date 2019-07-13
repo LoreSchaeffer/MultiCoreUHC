@@ -2,7 +2,10 @@ package it.multicoredev.uhc.util;
 
 import it.multicoredev.mbcore.spigot.Chat;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Copyright © 2019 by Lorenzo Magni
@@ -29,5 +32,16 @@ public class Misc {
         for(Player player : Bukkit.getOnlinePlayers()) {
             Chat.send(msg, player, true);
         }
+    }
+
+    public static Player getNearestPlayer(Player player) {
+        List<Entity> players = player.getNearbyEntities(1, 1, 1);
+        for(Entity entity : players) {
+            if(entity instanceof Player) {
+                return (Player) entity;
+            }
+        }
+
+        return null;
     }
 }
