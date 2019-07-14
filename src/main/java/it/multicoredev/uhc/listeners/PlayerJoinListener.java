@@ -1,14 +1,9 @@
-package it.multicoredev.uhc.util;
+package it.multicoredev.uhc.listeners;
 
-import it.multicoredev.mbcore.spigot.Chat;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import static it.multicoredev.uhc.Main.game;
 
@@ -32,34 +27,34 @@ import static it.multicoredev.uhc.Main.game;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Misc {
-    public static void broadcast(String msg) {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            Chat.send(msg, player, true);
-        }
-    }
+public class PlayerJoinListener implements Listener {
 
-    public static Player getNearestPlayer(Player player) {
-        List<Entity> players = player.getNearbyEntities(1, 1, 1);
-        for(Entity entity : players) {
-            if(entity instanceof Player) {
-                return (Player) entity;
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        if (game.getMissingPlayers().containsKey(player.getUniqueId())) {
+            String list = game.getMissingPlayers().get(player.getUniqueId());
+
+            switch (list) {
+                case "alive":
+                    game.addAlivePlayer(player);
+                    break;
+                case "dead":
+                    game.addDeadPlayer(player);
+                    break;
+                case "respawned":
+                    game.addRespawnedPlayer(player);
+                    break;
             }
+
+            game.removeMissingPlayer(player.getUniqueId());
         }
 
-        return null;
-    }
+        if (game.isRunning()) return;
 
-    public static boolean teamContainsAlivePlayers(Team team) {
-        ArrayList<String> alivePlayers = new ArrayList<>();
-        Set<String> players = team.getEntries();
-
-        game.getAlivePlayers().forEach(player -> alivePlayers.add(player.getName()));
-
-        for(String player : players) {
-            if(alivePlayers.contains(player)) return true;
+        if (!game.getAlivePlayers().contains(player) && !game.getRespawnedPlayers().contains(player) && !game.getAlivePlayers().contains(player)) {
+            game.addAlivePlayer(player);
         }
-
-        return false;
     }
 }

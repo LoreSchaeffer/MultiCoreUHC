@@ -1,5 +1,6 @@
 package it.multicoredev.uhc.listeners;
 
+import it.multicoredev.uhc.util.Misc;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -7,6 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scoreboard.Team;
+
+import java.util.Set;
 
 import static it.multicoredev.uhc.Main.config;
 import static it.multicoredev.uhc.Main.game;
@@ -35,18 +39,41 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
+        if (!game.isRunning()) return;
+
         Player player = event.getEntity();
 
-        if(config.isRespawnAllowed() && (game.getTime() / 60) <= config.getRespawnTime()) {
-            if(game.getRespawnedPlayers().contains(player)) {
+        if (config.isRespawnAllowed() && (game.getTime() / 60) <= config.getRespawnTime()) {
+            if (game.getRespawnedPlayers().contains(player)) {
+                game.removeRespawnedPlayer(player);
+                game.removeAlivePlayer(player);
                 game.addDeadPlayer(player);
             } else {
                 game.addRespawnedPlayer(player);
             }
         }
 
-        for(Player p : Bukkit.getOnlinePlayers()) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             p.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.MASTER, 1, 1);
+        }
+
+        Set<Team> teams = Bukkit.getScoreboardManager().getMainScoreboard().getTeams();
+        int activeTeams = 0;
+
+        for (Team team : teams) {
+            if (Misc.teamContainsAlivePlayers(team)) {
+                activeTeams++;
+            }
+        }
+
+        if(activeTeams == 1) {
+            game.endGame();
+
+            if(config.launchFireworks()) {
+                for(Player target : game.getAlivePlayers()) {
+                    game.launchFireworks(target);
+                }
+            }
         }
     }
 }

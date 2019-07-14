@@ -34,11 +34,14 @@ public class PlayerRespawnListener implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
+        if(!game.isRunning()) return;
+
         Player player = event.getPlayer();
 
         if(game.getRespawnedPlayers().contains(player) || game.getDeadPlayers().contains(player)) {
             player.setGameMode(GameMode.SPECTATOR);
         } else {
+            player.setHealth(config.getRespawnHealth());
             Misc.broadcast(config.getMessage("player-respawn").replace("{player}", player.getDisplayName()));
         }
     }

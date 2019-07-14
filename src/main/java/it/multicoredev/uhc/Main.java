@@ -4,9 +4,12 @@ import it.multicoredev.mbcore.spigot.Chat;
 import it.multicoredev.mbcore.spigot.ConfigManager;
 import it.multicoredev.mbcore.spigot.config.Configuration;
 import it.multicoredev.uhc.commands.Start;
+import it.multicoredev.uhc.commands.Test;
 import it.multicoredev.uhc.listeners.OpenInventoryListener;
 import it.multicoredev.uhc.listeners.PlayerDeathListener;
+import it.multicoredev.uhc.listeners.PlayerJoinListener;
 import it.multicoredev.uhc.listeners.PlayerRespawnListener;
+import it.multicoredev.uhc.util.Misc;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,19 +50,29 @@ public class Main extends JavaPlugin {
             return;
         }
 
+        if(config.cacheExists()) {
+            config.loadFromCache(game);
+            Misc.broadcast(config.getMessage("cache-restore"));
+            Chat.getLogger(config.getMessage("cache-restore"), "warning");
+        }
+
         registerListeners();
         registerCommands();
     }
 
     @Override
     public void onDisable() {
-
+        File cache = new File(getDataFolder(), "cache.yml");
+        if(cache.exists()) cache.delete();
     }
+
     private void registerCommands() {
         getCommand("startuhc").setExecutor(new Start());
+        getCommand("test").setExecutor(new Test());
     }
 
     private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(), this);
         getServer().getPluginManager().registerEvents(new OpenInventoryListener(), this);

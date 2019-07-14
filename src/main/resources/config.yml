@@ -10,8 +10,17 @@ respawn:
   active-until: 30
   respawn-health: 20
 
+ending:
+  fireworks: true
+  #Use {x}, {y}, {z} for the coordinates
+  fireworks-commands:
+    - "summon firework_rocket {x} {y} {z} {LifeTime:30,FireworksItem:{id:firework_rocket,Count:1,tag:{Fireworks:{Flight:3,Explosions:[{Type:0,Flicker:1,Trail:0,Colors:[I;11743532,14602026],FadeColors:[I;8073150,4408131]},{Type:1,Flicker:0,Trail:0,Colors:[I;8073150,15435844],FadeColors:[I;11743532,14602026]}]}}}}"
+    - "summon firework_rocket {x} {y} {z} {LifeTime:30,FireworksItem:{id:firework_rocket,Count:1,tag:{Fireworks:{Flight:3,Explosions:[{Type:2,Flicker:1,Trail:0,Colors:[I;3887386,4312372],FadeColors:[I;14602026,15435844]}]}}}}"
+
 messages:
+  cache-restore: "&cRestored game status from cache!"
   end-video: "&eIt's time to end the {n} video!"
+  ended: "Ended"
   game-running: "&cGame already running!"
   incorrect-usage: "&cIncorrect usage! Use this command like: &e{command}"
   insufficient-perm: "&cInsufficient permissions!"

@@ -52,6 +52,11 @@ public class TimerTask implements Runnable {
             game.getBossBar().setProgress(1);
         }
 
+        config.getCache().set("timer", time);
+        if(time % 10 == 0) {
+            new Thread(() -> config.saveCache()).start();
+        }
+
         game.updateBossbar();
         time++;
     }
@@ -62,6 +67,10 @@ public class TimerTask implements Runnable {
 
     public long getTime() {
         return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public boolean isDeathmatch() {

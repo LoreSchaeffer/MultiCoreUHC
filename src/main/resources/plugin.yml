@@ -6,8 +6,8 @@ author: LoreSchaeffer
 website: https://multicore.network
 
 commands:
-  help:
-    description: Show an help message
   startuhc:
     description: Starts the uhc
     aliases: [suhc, suca]
+  test:
+    description: Test command
